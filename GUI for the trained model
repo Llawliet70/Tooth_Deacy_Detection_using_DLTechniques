@@ -1,0 +1,67 @@
+import tkinter as tk
+from tkinter import *
+from tensorflow.keras.preprocessing import image
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+import easygui
+from keras.models import Sequential
+from keras. layers import Activation, Dropout, Flatten, Dense, Conv2D, MaxPooling2D
+model Sequential()
+model.add(Conv2D (filters=32, kernel_size=(3, 3), input_shape=(150, 150, 3), activation='relu', )) model.add(MaxPooling2D (pool_size=(2, 2)))
+model.add(Conv2D (filters=64, kernel_size=(3, 3), input_shape=(150, 150, 3), activation= 'relu', )) model.add(MaxPooling2D (pool_size=(2, 2)))
+model.add(Conv2D (filters=64, kernel_size=(3, 3), input_shape=(150, 150, 3), activation='relu', )) model.add(MaxPooling2D (pool_size=(2, 2)))
+model.add(Flatten())
+model.add(Dense (128))
+model.add(Activation ('relu'))
+model.add(Dropout (0.5))
+model.add(Dense (1))
+model.add(Activation ('sigmoid'))
+model.compile(loss='binary_crossentropy',
+optimizer='Adam',
+metrics=['accuracy'])
+model.load_weights ('model1.h5')
+def get_res (path):
+raw_img = image.load_img (path, target_size=(150, 150))
+raw_img
+image.img_to_array(raw_img)
+raw_img = np.expand_dims (raw_img, axis=0)
+raw_img = raw_img / 255
+predict = model.predict(raw_img)
+plt.imshow(cv2.imread(path)) 
+if predict >= 0.5:
+text = "Healthy Tooth"
+elif 0.25 <= predict <= 0.45: 
+text = "Mild Cavity"
+else:
+text = "Cavity Infected Tooth"
+plt.show()
+return text
+
+def upload():
+path easygui. fileopenbox()
+t = get_res (path)
+frame Frame (top, width=100, height=100)
+frame.pack()
+frame.place(x=220, y=150)
+print(t)
+Lab Label (frame, text=t)
+lab.configure(background='#364156', foreground='white', font=('calibri', 10, 'bold'))
+lab.pack(side=BOTTOM, pady=20)
+
+#lab.place(x=200, y=100)
+top = tk. Tk()
+top.geometry('500x500')
+top.title('Teeth Cavity !')
+backg = PhotoImage(file='bg.png')
+# canvas.create_image (10, 10, anchor=NW, image-backg)
+label1 = Label(top, image=backg)
+label1.place(x=0, y=0)
+out = Label(text="Result", padx=15, pady=10)
+out.configure (font=('calibri', 20, 'bold'))
+out.place(x=200, y=50)
+upload = Button (top, text="Select an Image", command-upload, padx=30, pady=20)
+upload.configure (background= '#364156', foreground='white', font=('calibri', 20, 'bold'))
+upload.pack(side=TOP, pady=50)
+upload.place(x=125, y=300)
+top.mainloop()
